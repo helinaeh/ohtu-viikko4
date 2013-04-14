@@ -32,15 +32,15 @@ public class Application {
         while (command != null) {
             if (command.equals("?")) {
                 user = newUser();
-                System.out.println("Login (give ? to register a new user)");
-                System.out.print("username: ");
-                command = scanner.nextLine();
             } else {
-                user = login(command);
-                if (!user.getName().equals("")) {
+                user = findUser(command);
+                if (user != null) {
                     break;
                 }
             }
+            System.out.println("Login (give ? to register a new user)");
+            System.out.print("username: ");
+            command = scanner.nextLine();
         }
 
         System.out.println("Welcome to Ratebeer " + user.getName() + "!");
@@ -120,7 +120,7 @@ public class Application {
         // luodaan olut ilman panimon asettamista
         Beer b = new Beer("Märzen");
         server.save(b);
-
+        
         // jotta saamme panimon asetettua, tulee olot lukea uudelleen kannasta
         b = server.find(Beer.class, b.getId());
         brewery = server.find(Brewery.class, brewery.getId());
@@ -128,6 +128,8 @@ public class Application {
         server.save(brewery);
 
         server.save(new Brewery("Paulaner"));
+        server.save(new Pub("Pikkulintu"));
+        server.save(new User("mluukkai"));
     }
 
     private void findBeer(User user) {
@@ -142,10 +144,10 @@ public class Application {
 
         //when the beer is found:
         System.out.println(foundBeer.getName() + " (" + foundBeer.getBrewery() + ")");
-        
+
         List<Rating> ratings = listRatings();
         double average = averageRatings(ratings);
-        
+
         System.out.println("  number of ratings: " + ratings.size()
                 + " average: " + average);
         System.out.println("not available currently!");
@@ -221,7 +223,7 @@ public class Application {
             System.out.println(beer);
             List ratings = listRatings();
             System.out.println("  ratings given " + ratings.size()
-                    + "average " + averageRatings(ratings));
+                    + " average " + averageRatings(ratings));
         }
     }
 
@@ -278,10 +280,6 @@ public class Application {
         }
     }
 
-    private User login(String name) {
-        return findUser(name);
-    }
-    
     private User findUser(String name) {
         List<User> users = server.find(User.class).findList();
         for (User user : users) {
@@ -295,7 +293,7 @@ public class Application {
 //    private void asd() {
 //        
 //    }
-    
+
     private List listRatings() {
         List<Rating> ratings = server.find(Rating.class).findList();
         return ratings;
@@ -330,7 +328,7 @@ public class Application {
         }
         return 0;
     }
-    
+
     private void showBeersInPub() {
         System.out.print("Pub: ");
         String name = scanner.nextLine();
@@ -344,8 +342,7 @@ public class Application {
             for (Beer beer : beers) {
                 System.out.println(beer);
             }
-        }
-        else {
+        } else {
             System.out.println("No beers available");
         }
     }
@@ -377,8 +374,7 @@ public class Application {
                 }
             }
             System.out.println("Not served in this pub!");
-        }
-        else {
+        } else {
             System.out.println("No beers available");
         }
     }
