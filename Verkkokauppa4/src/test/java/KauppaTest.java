@@ -68,10 +68,11 @@ public class KauppaTest {
         //parametreina: String nimi, int viitenumero, String tililta, String tilille, int summa
     }
     
-//    @Test
-//    public void hello() {
-//    }
-//    
+    @Test
+    public void hello() {
+        
+    }
+    
 //    @Test
 //    public void hello() {
 //    }
