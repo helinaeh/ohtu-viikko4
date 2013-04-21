@@ -1,0 +1,354 @@
+GITHUBIN JA BASHIN KƒYTT÷
+
+Nettisivuja:
+* https://we.riseup.net/debian/git-development-howto
+* http://www.ralfebert.de/tutorials/git/
+* http://git-scm.com/book
+
+
+1) kansion luominen
+
+$ mkdir Repository
+$ mkdir ohtu-viikko1
+# ohtu-viikko1 on repon nimi t‰ss‰ tilanteessa
+$ touch README.md
+$ git init
+# luo uuden git repon siihen kansioon, jossa ollaan
+$ git add README.md
+$ git commit -m "kommitointiviesti"
+$ git remote add origin https://github.com/helinaeh/ohtu-viikko1.git
+# huom. t‰ss‰ luodaan yhteys githubiin nettisivulla luotuun repositoryyn.
+# jos haluaa tallentaa johonkin toiseen repoon, se pit‰‰ tehd‰ uudelleen:
+# luo github.comissa uusi repo ja komenna "remote add origin..."
+$ git push -u origin master
+
+JOS push ei toimi:
+
+$ git pull origin master
+$ git push origin master
+# huom. -u ei pakollinen
+
+
+2) tiedostojen lis‰‰minen ja p‰ivitt‰minen eli PUSHAAMINEN
+
+$ git add -A
+$ git commit -m "kommitointiviesti"
+$ git push origin master
+
+
+3) tiedostoon kirjoittaminen
+
+$ cat >> tekstikokeilu
+# Git Bashin kirjoitustilasta poistuminen: ctrl + d
+
+$ cat >> .gitignore
+# .gitignore sis‰lt‰‰ ne tiedostot, jotka kuuluu "ignorata"
+
+# HUOM! cat overwriteaa vanhat tiedot tiedostosta
+
+
+4) Add things to repository
+
+$ git add .
+$ git status
+# huom. add-komennolla voi lis‰t‰ koto yhsitt‰isi‰ tiedostoja ja tai kokonaisia kansioita
+
+
+5) Commit things to repository
+
+$ git commit -m "kommitointiviesti"
+
+
+6) If you change a file in your working tree
+
+$ edit somefile.txt
+$ git add somefile.txt
+
+
+7) Loki
+
+$ git log
+# logista poistuminen: ctrl + c
+
+
+8) config-listan muokkaaminen
+
+$ git config --global user.name "Helin‰ Hakala"
+$ git config --list
+$ cat ~/.gitconfig
+[user]
+	name = Helin‰ Hakala
+# yll‰ n‰kyy, miten cat n‰ytt‰‰ listan
+
+
+9) Log-listan tarkasteleminen tiiviimp‰n‰ muotona (yksi rivi/commit)
+
+$ git log --pretty=oneline --abbrev-commit
+
+
+10) Throwing changes away (jos muutoksia ei halutakaan tallentaa)
+
+$ git checkout somefile.txt
+# jos tiedostoa ei ole viel‰ lis‰tty indeksiin add:ill‰
+
+$ git reset HEAD somefile.txt
+# jos tiedosto on jo lis‰tty indeksiin
+# HEAD viittaa aina viimeisimp‰‰n kommitointiin
+
+$ git reset HEAD
+# jos halutaan tyhjent‰‰ koko indeksi
+
+
+11) Reverting commits
+
+$ git revert 068b9b9
+# 068b9b9 = <commit> eli se numero, joka kommitointi halutaan poistaa
+
+
+12) Kansion/repositorion kloonaaminen
+
+# mene sinne kansioon (bashissa), jonne haluat kloonata kyseisen repon
+$ git clone git@github.com:helinaeh/repositorionNimi.git nimiKloonille
+
+# jos kopioit jonkun toisen kuin oman reposi... 
+$ git clone git://github.com/mluukkai/ohtu2013.git kansionNimi
+# mluukkai = toinen github-k‰ytt‰j‰, ohtu2013 = repon nimi
+
+
+13) Uuden Branchin luominen
+
+$ git branch
+# komenna projektissa ollessa, n‰ytt‰‰ kaikki kyseisen kansion branchit
+# t‰hdell‰ merkattu branch on valittuna
+# jos uusia brancheja ei ole viel‰ luotu, siell‰ pit‰isi olla vain rivi:
+* master
+
+$ git branch magpie
+# luo uuden branchin, jonka nimi on magpie
+
+$ git checkout magpie
+# branchien v‰lill‰ voi vaihtaa, t‰ss‰ vaihdetaan magpie'en
+
+
+14) Create a new repository on the command line
+$ touch README.md
+$ git init
+$ git add README.md
+$ git commit -m "first commit"
+$ git remote add origin git@github.com:helinaeh/ohtu-viikko3.git
+$ git push -u origin master
+
+
+15) tarkastele repositorion branchej‰ ja kommitointeja
+
+$ gitk --all
+# avaa uuden ikkunan, jossa n‰kyy repon kommitoinnit, branchit
+# ja kommitointien tekij‰t
+
+
+16) Branchien synkronointi (eli yhdist‰minen)
+$ git checkout bird
+# valitaan ensin bird-branch
+$ git rebase master
+# lis‰t‰‰n birdiin masterissa tehdyt muutokset
+# ja yhdistet‰‰n birdin muutosten kanssa
+
+
+17) Merging branches (eli yhdist‰minen)
+$ git diff master bird
+# tarkistetaan muutoksia tms
+$ git merge bird
+# merge tehd‰‰n master-branchissa, ja siin‰ repo bird yhdistet‰‰n masteriin
+
+
+18) Branchin poistaminen
+
+$ git branch -d bird
+# toimii, jos kaikki on yhdistetty
+
+$ git branch -D bird
+# jos kaikkea ei ole mergetty, niin pakottaminen
+
+
+19) Konfliktit yhdist‰misess‰ (branching)
+
+$ git merge bird
+Auto-merging tarkea.txt
+CONFLICT (content): Merge conflict in munin-node.c
+Automatic merge failed; fix conflicts and then commit the result.
+
+# Konfliktin j‰lkeen feilannut tiedosto avataan
+# ja siit‰ korjataan virheet ja p‰‰llekk‰isyydet
+
+T‰lt‰ tekstitiedosto voisi n‰ytt‰‰ failatun mergen j‰lkeen
+(Head- ja toka-branchit):
+
+<<<<<<< HEAD
+J‰nnitt‰v‰ el‰m‰... Hihhih onpas t‰rke‰‰ teksti‰!
+=======
+Hihhih onpas t‰rke‰‰ teksti‰! Rakkautta ilmassa! ;3
+>>>>>>> toka
+
+
+Poista kaikki, mit‰ et halua j‰tt‰‰ lopulliseen tiedostoon, sitten kommitoi.
+
+
+20) Useiden k‰ytt‰jien kesken jaettu repo
+
+# jokainen pushaaminen muuttaa oikeaa repoa
+# omat ja muiden samanaikaiset muutokset pit‰‰ synkronoida
+$ git fetch origin
+
+
+21) Pushaaminen, kun on useampi branch
+
+# pushaa kaikki branchit remote repositoryyn eli et‰repositorioon
+# (joka on se "oikea", ei klooni tms.)
+$ git push --all
+$ git push --tags
+# ylempi pit‰‰ ainakin tehd‰
+
+# jonkun tietyn branchin pushaaminen
+$ git push remotename branch
+# jossa "remotename" on remote eli yleens‰ origin
+# ja "branch" on se haara, jonka haluat jakaa
+
+
+22) Tracking branches eli "tr‰kk‰‰minen"
+
+Tracking branchit ovat lokaaleja brancheja, joilla on suora suhde remote branchiin. Tracking branch luodaan automaattisesti, kun lokaalia branchia k‰ytet‰‰n. Repoa luodessa syntyy usein automaattisesti branch master (mik‰ on tracking branch). Sen lis‰ksi voi kuitenkin asettaa muitakin brancheja tracking brancheiksi eli "tr‰k‰t‰" niit‰. Tr‰kk‰‰minen tapahtuu seuraavasti:
+
+$ git checkout -b magpie origin/tracked
+# komento luo magpie-branchin (sellaista ei siis saa olla etuk‰teen!)
+# ja tr‰kk‰‰ originin tracked-branchia
+
+tai
+
+$ git checkout --track origin/tracked
+# toimii vain gitin versiosta 1.6.2 eteenp‰in
+
+Alkuper‰iseen branchiin saadaan tr‰kk‰‰v‰n branchin p‰ivitykset seuraavasti:
+# komennot alkuper‰isess‰ branchiss‰
+$ git pull origin magpie
+# magpie on tr‰kk‰‰v‰ branch
+
+
+23) Eri kloonien branchien suhteet muihin (remote) brancheihin
+
+$ git remote show origin
+# n‰ytt‰‰, mitk‰ branchit ovat suhteessa mihinkin
+
+
+24) Ep‰ajantasaisen koodin pushaaminen
+
+Joskus Githubissa oleva master-haara on edell‰ paikallisen repon master-haaraa. Silloin push ei toimi normaalisti:
+
+$ git push
+Counting objects: 12, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (9/9), 764 bytes, done.
+Total 9 (delta 3), reused 0 (delta 0)
+To git@github.com:mluukkai/ohtu-viikko1.git
+   58b92fd..5198e05  haara2 -> haara2
+ ! [rejected]        master -> master (non-fast-forward)
+error: failed to push some refs to 'git@github.com:mluukkai/ohtu-viikko1.git'
+To prevent you from losing history, non-fast-forward updates were rejected
+Merge the remote changes before pushing again.  See the 'Note about
+fast-forwards' section of 'git push --help' for details.
+
+Ongelma ratkeaa tekem‰ll‰ ensin pull, sitten korjaamalla konfliktit ja pushaamalla uudestaan.
+
+
+25) Useamman et‰repon liitt‰minen paikalliseen klooniin
+
+$ git remote
+origin
+# n‰ytt‰‰, mit‰ et‰repoja on sill‰ hetkell‰
+
+$ git remote add etar git@github.com:helinaeh/reponNimi.git
+# jossa etar on nimi, joka et‰repolle annetaan (kloonissa)
+# ja reponNimi on se repositorio, josta tehd‰‰n et‰repo
+
+$ git remote -v
+origin [url]
+etar [url]
+# n‰ytt‰‰ et‰repot lis‰yksen j‰lkeen
+
+
+26) Toiseen et‰repoon pushaaminen ja pullaaminen
+
+$ git push [reponNimi] [branchinNimi]
+$ git pull [reponNimi] [branchinNimi]
+# tavallinen komento siis on git push origin master
+
+
+27) Remote-repon liitt‰minen uudeksi branchiksi
+
+$ git fetch ohtu
+# ohtu = et‰repon nimi
+$ git checkout -b ohtu-lokaali ohtu/master
+# luodaan ohtu-lokaali -niminen branch ja menn‰‰n siihen
+
+
+28) Tietyn kansion kopioiminen et‰reposta/branchista masteriin
+
+$ git checkout master
+# huolehdi, ett‰ olet masterissa!
+$ git checkout ohtu-lokaali viikko2
+# kopioidaan viikko2-niminen kansio masteriin
+
+
+29) T‰git
+
+http://git-scm.com/book/ch2-6.html
+
+Git uses two main types of tags: lightweight and annotated. A lightweight tag is very much like a branch that doesnít change ó itís just a pointer to a specific commit. Annotated tags, however, are stored as full objects in the Git database. Theyíre checksummed; contain the tagger name, e-mail, and date; have a tagging message; and can be signed and verified with GNU Privacy Guard (GPG). Itís generally recommended that you create annotated tags so you can have all this information; but if you want a temporary tag or for some reason donít want to keep the other information, lightweight tags are available too.
+
+# t‰gien listaaminen
+$ git tag
+
+# tiettyjen t‰gien listaaminen
+$ git tag -l 'v1.4.2.*'
+# hakee t‰git, jotka alkavat v1.4.2.*
+
+# lightweight t‰gin luominen
+$ git tag [taginNimi]
+
+
+30) Poistetun tiedoston/kansion palauttaminen
+
+Jos jotain on poistettu ja muutos on jo kommitoitu:
+
+$ git checkout 3290b03cea08af987ee7ea57bb98a4886b97efe0 -- xxx.txt
+# miss‰ pitk‰ merkkijono on sen commitin id, jossa tiedosto viel‰ on tallessa
+# ja xxx.txt on tiedosto, joka halutaan palauttaa
+
+Muista ‰d‰t‰ ja kommitoida!
+
+
+31) Edellisen commitin kumoaminen
+
+$ git revert HEAD --no-edit
+# luo uuden kommitin, jossa edellisen kommitin muutokset on poistettu
+# no-edit tarkoittaa, ett‰ commitin nime‰ ei muuteta, ilman sit‰ muutos itse
+
+# kumouksen kumoaminen
+$ git checkout HEAD^
+
+
+32) Mihin tahansa committiin revertaaminen
+
+$ git revert 3290b03cea08af987ee7ea57bb98a4886b97efe0
+# miss‰ pitk‰ merkkijono on sen commitin id, johon halutaan palata
+
+
+33) Kaikkien haarojen (branchien) tarkasteleminen
+
+$ gitk --all
+
+
+34) Branchin muuttaminen masteriksi
+
+$ git reset --hard haara
+# jossa haara on branch, joka halutaan muuttaa masteriksi

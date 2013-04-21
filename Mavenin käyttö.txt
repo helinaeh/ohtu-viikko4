@@ -1,0 +1,128 @@
+MAVENIN KÄYTTÖ
+
+HUOM! Windowsissa käytetään windowsin omaa komentoriviä!
+
+
+1) testikattavuuden tarkistaminen
+# suorita projektin juuresta komento (W:n komentorivillä)
+$ mvn cobertura:cobertura
+
+
+2) avaa testitiedostot...
+kattavuusraportit tulevat hakemistoon target/site/cobertura
+saat avattua raportin esim. komennolla 
+firefox target/site/cobertura/index.html
+
+kun luokan Varasto testien koodikattavuus on 100% pushaa tekemäsi muutokset GitHubiin
+
+
+3) JXR
+jxr:n avulla checkstylen raportista pääsee klikkaamalla vastaaville sourcekoodin riveille.
+
+$ mvn jxr:jxr checkstyle:checkstyle
+
+Raportti tulee projektin juureen hakemistoon
+target/site/checkstyle.html
+
+
+4) JXR Checkstype "omilla" asetuksilla
+
+$ mvn jxr:jxr checkstyle:checkstyle -Dcheckstyle.config.location=xxx/my_checks.xml
+# jossa xxx vastaa reittiä, jossa tiedosto my_checks.xml sijaitsee
+
+$ mvn jxr:jxr checkstyle:checkstyle -Dcheckstyle.config.location=../my_checks.xml
+# jossa .. tarkoittaa, että xml-tiedosto sijaitsee projektin juuressa
+
+
+5) Erilaisia ominaisuuksia
+Staattisen analyysin työkalut kuten checkstyle
+Testikattavuus kuten cobertura
+
+
+6) SONARIN käyttö
+
+Lataa Sonar osoitteesta http://www.sonarsource.org/downloads/
+(jos sitä ei jo ole koneella).
+Mene kohteeseen
+
+sonar-3.5/bin/koneenTyyppiaVastaavaHakemisto
+
+ja käynnistä sieltä Sonar.
+
+Sonarin raportit näkyvät selaimessa osoitteessa
+
+localhost:9000
+
+
+7) Sonar-raportin generoiminen maven-projektille
+
+# komenna projektin juuressa
+$ mvn clean test sonar:sonar
+
+HUOM! Sonarin pitää olla käynnistettynä raportin generointihetkellä!
+
+
+8) easyB-testien ajaminen (Groovy)
+
+$ mvn integration-test
+
+Jotta komento toimii, se on pitänyt määrittää projektin pom.xml-tiedostossa itse!
+Testien tulokset raportoidaan tiedostoon
+
+target/easyb/easyb-report.html
+
+
+
+9) Maven-projektin ajaminen komentoriviltä
+
+$ mvn exec:java -Dexec.mainClass=ohtu.App
+# jossa ohtu on package ja App on ajettava luokka
+
+
+10) Mutaatiotestaus
+
+$ mvn test org.pitest:pitest-maven:mutationCoverage
+# komennetaan projektin juuressa
+
+Testitiedosto ilmestyy projektin juuressa sijaitsevaan tiedostoon
+target/pit-reports/aikaleima/index.html
+
+
+11) Jettyn käyttö
+
+# komenna projektikansiossa
+$ mvn jetty:run
+
+Jetty on keyvt HTTP-palvelin ja Servlettien ajoympäristö. Kokeiluprojektiin on konfiguroitu Jetty Maven-pluginiksi.
+Sovellusta voi nyt käyttää osoitteesta
+
+http://localhost:8080
+
+eli paikalliselta koneeltasi portista 8080.
+Jos koneella on jo jotain muuta portissa 8080:
+
+$ mvn -D jetty.port=9999 jetty:run
+# konfigurointi porttiin 9999
+
+Käynnistetyn sovelluksen saa sammutettua painamalla komentorivillä ctrl+c tai ctrl+d.
+
+
+12) .jar-tiedoston luominen
+
+$ mvn install
+
+# koko ohjelman sisältävä jar-tiedosto syntyy näin:
+$ mvn assembly:assembly
+
+# jarin luominen shade-pluginia käyttämällä
+$ mvn package
+
+
+13) .jar-tiedoston ajaminen
+
+$ java -cp tiedostonNimi.jar ohtu.Main
+# missä tiedostonNimi.jar on jar-tiedoston nimi
+# ja ohtu.Main main-metodin sisältävä luokka
+
+# jos shade käytössä
+$ java -jar tiedostonnimi.jar
