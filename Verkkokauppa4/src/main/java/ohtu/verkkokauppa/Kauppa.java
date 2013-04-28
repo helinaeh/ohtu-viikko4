@@ -19,10 +19,6 @@ public class Kauppa {
         this.viitegeneraattori = viiteet;
         kaupanTili = "33333-44455";
     }
-    
-    public String getKaupanTili() {
-        return kaupanTili;
-    }
 
     public void aloitaAsiointi() {
         ostoskori = new Ostoskori();
@@ -31,6 +27,7 @@ public class Kauppa {
     public void poistaKorista(int id) {
         Tuote t = varasto.haeTuote(id); 
         varasto.palautaVarastoon(t);
+        ostoskori.poista(t);
     }
 
     public void lisaaKoriin(int id) {
